@@ -96,9 +96,9 @@ Tested on Windows 11, RTX 4090 (driver 617.42), offline mode, Golden Ridge Reser
 
 | | Unpatched | Patched |
 |---|---|---|
-| Crashes | 5 in about 48 min of play (about 1 per 10 min) | 0 in about 77 min (38 min idle + 39 min walking) |
+| Crashes | 5 in about 48 min of play (about 1 per 10 min) | 0 in about 127 min over two launches (38 min idle + 89 min walking into new areas) |
 
-At the unpatched rate, 77 crash-free minutes would happen by chance about 0.05% of the time.
+At the unpatched rate, 127 crash-free minutes would happen by chance about 3 times in a million.
 
 Not yet tested: online or co-op sessions, and long active fishing sessions. Reports welcome.
 
