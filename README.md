@@ -1,5 +1,7 @@
 # Call of the Wild: The Angler Crash Fix
 
+[![Support me on Ko-fi](https://img.shields.io/badge/Ko--fi-buy%20me%20a%20coffee-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/finalpantasy)
+
 **Call of the Wild: The Angler crash fix** for PC (Steam, DirectX 12). It stops the random
 **"We're sorry, something went wrong"** crash (Apex Crash Handler, crash to desktop) that happens
 mid-game, even while idle. It's a community fix: it changes 5 bytes of the game exe, backs up the
@@ -139,3 +141,7 @@ revert and open an issue.
 ## License
 
 MIT
+
+## Support
+
+Free hobby project. If it helps you, you can [buy me a coffee on Ko-fi](https://ko-fi.com/finalpantasy). Thank you!
