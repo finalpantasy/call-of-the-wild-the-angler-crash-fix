@@ -52,6 +52,10 @@ threads. The wait just no longer runs unrelated work in the middle of an unfinis
 3. Right-click the zip and choose **Extract All**.
 4. Double-click **`Install Angler Crash Fix.bat`**, then wait for "Done: crash fix applied."
 
+The installer finds the game through your Steam libraries on any drive. If it can't, it asks you to
+paste the game folder (in Steam: right-click the game > Manage > **Browse local files**, then copy that
+folder's address).
+
 If Windows shows "Windows protected your PC", click **More info**, then **Run anyway**. If it says
 access is denied, right-click the file and choose **Run as administrator**.
 

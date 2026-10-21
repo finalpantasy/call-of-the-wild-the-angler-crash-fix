@@ -30,6 +30,7 @@ param(
 $ErrorActionPreference = "Stop"
 trap { Write-Host "ERROR: $($_.Exception.Message)" -ForegroundColor Red; exit 1 }
 
+$Version    = "1.0.1"
 $ExeName    = "CotWTheAngler_Steam.exe"
 $GameFolder = "Call of the Wild The Angler"
 $StockSha   = "F3042F580F7EF79349313388522249EB906D91266D760893B7BF1A0BDE169021"
@@ -39,7 +40,11 @@ $FileOffset = 0x106237F                                  # RVA 0x1062F7F
 [byte[]]$New = 0x31, 0xC0, 0x0F, 0x1F, 0x00                  # xor eax,eax ; nop  (-> SwitchToThread)
 
 function Find-Game {
-  if ($GamePath) { return (Join-Path $GamePath $ExeName) }
+  if ($GamePath) {
+    $p = Join-Path $GamePath $ExeName
+    if (-not (Test-Path $p)) { throw "No $ExeName in ""$GamePath""." }
+    return $p
+  }
   $roots = @()
   try { $roots += (Get-ItemProperty "HKCU:\Software\Valve\Steam" -Name SteamPath).SteamPath } catch {}
   foreach ($r in @($roots)) {
@@ -54,7 +59,16 @@ function Find-Game {
     $p = Join-Path $r "steamapps\common\$GameFolder\$ExeName"
     if (Test-Path $p) { return $p }
   }
-  throw "Could not find $ExeName. Pass -GamePath ""<folder that contains $ExeName>""."
+  # Not in any Steam library: ask for the folder (Steam > right-click game > Manage > Browse local files)
+  Write-Host "Could not find the game automatically." -ForegroundColor Yellow
+  Write-Host "In Steam, right-click the game > Manage > Browse local files, and copy that folder's address."
+  while ($true) {
+    $in = "$(Read-Host "Paste the game folder here and press Enter (or just press Enter to cancel)")".Trim().Trim('"')
+    if (-not $in) { throw "Cancelled. Nothing was changed." }
+    $p = if ($in -like "*.exe") { $in } else { Join-Path $in $ExeName }
+    if (Test-Path $p) { return $p }
+    Write-Host "No $ExeName in that folder. Try again." -ForegroundColor Yellow
+  }
 }
 
 function Read-Site([string]$Path) {
@@ -70,6 +84,7 @@ function Write-Site([string]$Path, [byte[]]$Bytes) {
 
 function Same([byte[]]$a, [byte[]]$b) { return (Compare-Object $a $b -SyncWindow 0) -eq $null }
 
+Write-Host "Angler Crash Fix v$Version"
 $exe = Find-Game
 $sha = (Get-FileHash $exe -Algorithm SHA256).Hash
 $site = Read-Site $exe

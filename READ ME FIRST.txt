@@ -9,6 +9,9 @@ INSTALL
 3. Double-click "Install Angler Crash Fix.bat".
 4. Wait for "Done: crash fix applied." and press any key.
 
+If it asks for the game folder: in Steam, right-click the game, Manage,
+Browse local files, copy that folder's address, paste it in the window, press Enter.
+
 If Windows shows "Windows protected your PC", click "More info", then "Run anyway".
 If it says access is denied, right-click the .bat file and choose "Run as administrator".
 
