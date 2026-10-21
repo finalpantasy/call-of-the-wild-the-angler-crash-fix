@@ -1,0 +1,29 @@
+Call of the Wild: The Angler - Crash Fix
+=========================================
+
+Stops the random "We're sorry, something went wrong" crash to desktop.
+
+INSTALL
+1. Close the game.
+2. Extract this zip to any folder (right-click the zip, "Extract All").
+3. Double-click "Install Angler Crash Fix.bat".
+4. Wait for "Done: crash fix applied." and press any key.
+
+If Windows shows "Windows protected your PC", click "More info", then "Run anyway".
+If it says access is denied, right-click the .bat file and choose "Run as administrator".
+
+UNINSTALL
+Double-click "Uninstall Angler Crash Fix.bat".
+Or in Steam: right-click the game, Properties, Installed Files,
+"Verify integrity of game files".
+
+NOTES
+- Works only with the current Steam version of the game. On any other version
+  it changes nothing.
+- It backs up the original game file first
+  (CotWTheAngler_Steam.exe.stock-backup in the game folder).
+- A Steam update replaces the game file and removes the fix.
+- Not affiliated with the game's developers or publisher.
+
+More info, source and how it works:
+https://github.com/finalpantasy/call-of-the-wild-the-angler-crash-fix

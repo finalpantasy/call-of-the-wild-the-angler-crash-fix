@@ -44,7 +44,24 @@ One instruction in the pipeline-wait loop (RVA `0x1062F7F`) is changed:
 The thread still waits for its pipeline. The pipeline still compiles on the game's other worker
 threads. The wait just no longer runs unrelated work in the middle of an unfinished render pass.
 
-## Install
+## Easy install (no technical knowledge needed)
+
+1. Close the game.
+2. Download **`AnglerCrashFix.zip`** from the
+   [latest release](https://github.com/finalpantasy/call-of-the-wild-the-angler-crash-fix/releases/latest).
+3. Right-click the zip and choose **Extract All**.
+4. Double-click **`Install Angler Crash Fix.bat`**, then wait for "Done: crash fix applied."
+
+If Windows shows "Windows protected your PC", click **More info**, then **Run anyway**. If it says
+access is denied, right-click the file and choose **Run as administrator**.
+
+**To uninstall,** double-click **`Uninstall Angler Crash Fix.bat`**, or in Steam right-click the game >
+Properties > Installed Files > **Verify integrity of game files**.
+
+The installer saves a copy of the original game file as `CotWTheAngler_Steam.exe.stock-backup` in the
+game folder before changing anything.
+
+## Install from the command line
 
 1. Close the game.
 2. Download `AnglerCrashFix.ps1`.

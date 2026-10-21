@@ -28,6 +28,7 @@ param(
   [string]$GamePath
 )
 $ErrorActionPreference = "Stop"
+trap { Write-Host "ERROR: $($_.Exception.Message)" -ForegroundColor Red; exit 1 }
 
 $ExeName    = "CotWTheAngler_Steam.exe"
 $GameFolder = "Call of the Wild The Angler"
