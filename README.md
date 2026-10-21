@@ -4,7 +4,7 @@
 
 **Call of the Wild: The Angler crash fix** for PC (Steam, DirectX 12). It stops the random
 **"We're sorry, something went wrong"** crash (Apex Crash Handler, crash to desktop) that happens
-mid-game, even while idle. It's a community fix: it changes 5 bytes of the game exe, backs up the
+mid-game, even while idle. It's a community fix: it patches the game exe in two places, backs up the
 original first, and can be undone with one command.
 
 Keywords: The Angler crashing, The Angler crash to desktop, COTW The Angler crash fix, Apex Crash
@@ -20,7 +20,7 @@ Handler something went wrong, The Angler access violation, CotWTheAngler_Steam.e
 - It happens at random, after minutes or hours of play, even while standing still (AFK).
 - Reinstalling, verifying files and updating GPU drivers don't help.
 - The crash dump shows an access violation inside `CotWTheAngler_Steam.exe` itself, at one of
-  `+0x104A725`, `+0x104A832`, `+0x104ACDF` or `+0x1049F7C`.
+  `+0x104A725`, `+0x104A832`, `+0x104ACDF`, `+0x1049F7C` or `+0x104ABE2`.
 
 ## What causes it
 
@@ -36,7 +36,7 @@ shader waits and more chances to hit it.
 
 ## What the fix does
 
-One instruction in the pipeline-wait loop (RVA `0x1062F7F`) is changed:
+**Fix 1 (5 bytes).** One instruction in the pipeline-wait loop (RVA `0x1062F7F`) is changed:
 
 | | Bytes | Meaning |
 |---|---|---|
@@ -45,6 +45,16 @@ One instruction in the pipeline-wait loop (RVA `0x1062F7F`) is changed:
 
 The thread still waits for its pipeline. The pipeline still compiles on the game's other worker
 threads. The wait just no longer runs unrelated work in the middle of an unfinished render pass.
+
+**Fix 2 (a small lock, new in v2).** Fix 1 was not enough: a crash dump from a patched game showed two
+worker threads running the same render pass (function `0x1BCD20`) of two consecutive frames at once.
+The second run resets the pass's command list while the first is still recording into it. Fix 2 adds a
+lock around that function, one lock slot per render pass, so the second run waits for the first to
+finish. It supports a thread re-entering the function, and it stops waiting after about 1,500 tries
+(a few seconds) and runs without the lock instead of risking a freeze.
+
+Fix 2 adds a 512-byte code section and a 4 KB data section to the exe. The data section also holds
+three counters (locks taken, times a thread had to wait, times it gave up) at RVA `0x3569400`.
 
 ## Easy install (no technical knowledge needed)
 
@@ -117,11 +127,16 @@ Steam's **Verify integrity of game files** also restores the original exe.
 
 Tested on Windows 11, RTX 4090 (driver 617.42), offline mode, Golden Ridge Reserve.
 
+**Fix 1 alone (v1.x):**
+
 | | Unpatched | Patched |
 |---|---|---|
-| Crashes | 5 in about 48 min of play (about 1 per 10 min) | 0 in about 127 min over two launches (38 min idle + 89 min walking into new areas) |
+| Crashes | 5 in about 48 min of play (about 1 per 10 min) | 0 in about 127 min over two launches near the starting camp, but 1 crash in 458 s of real play elsewhere (the one that led to fix 2) |
 
-At the unpatched rate, 127 crash-free minutes would happen by chance about 3 times in a million.
+**Fix 1 + fix 2 (v2.0.0):** the lock code was checked by instruction-level emulation (free, re-entrant,
+contended, give-up and release paths all pass), the patched exe loads and runs, and the patch
+applies and reverts cleanly on both a stock and a fix-1-only exe. A long soak in normal play is still
+in progress, so v2 is not tagged as a release yet.
 
 Not yet tested: online or co-op sessions, and long active fishing sessions. Reports welcome.
 
